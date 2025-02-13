@@ -12,6 +12,7 @@
   "otherPortsAttributes": {
     "onAutoForward": "ignore"
   },
+  "postCreateCommand": "pip install -r requirements.txt",
   "features": {
     "ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools:1": {},
 	"ghcr.io/devcontainers/features/docker-in-docker:2": {},
