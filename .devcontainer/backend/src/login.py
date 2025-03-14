@@ -1,8 +1,10 @@
+import os
 from flask import Blueprint, url_for, render_template, redirect, request
 from flask_login import LoginManager, login_user, UserMixin
 import firebase_admin
 from firebase_admin import auth, firestore, credentials
 
+firebase_cred_path = os.getenv("FIREBASE_CREDENTIALS", "path til ServiceAccountKey.json")
 cred = credentials.Certificate("path til serviceAccountKey.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
@@ -21,8 +23,8 @@ class User(UserMixin):
 def load_user(user_id):
     user_ref = db.collection('users').document(user_id).get()
     if user_ref.exists:
-        user_Data = user_ref.to.dict()
-        return User(user_Data['uid'], user_data['username'], user_data['email'])
+        user_data = user_ref.to.dict()
+        return User(user_data['uid'], user_data['username'], user_data['email'])
     return None
 
 @login.route('/login', methods=['GET', 'POST'])
@@ -37,7 +39,7 @@ def show():
 
             user_ref = db.collection('users').document(user.uid).get()
             if user_ref.exists:
-                user_Data = user_ref.to_dict()
+                user_data = user_ref.to_dict()
                 user_obj = User(user.uid, user_data['username'], user.email)
                 login_user(user_obj)
                 return redirect(url_for('home.show'))
@@ -46,4 +48,4 @@ def show():
         except firebase_admin.auth.UserNotFoundError:
             return redirect(url_for('login.show')+ 'Feil epost eller passord')
         
-        return render_template('login.html')  
+    return render_template('login.html')  
