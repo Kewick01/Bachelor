@@ -1,41 +1,54 @@
-from flask import Flask, request, jsonify
-from firebase_config import auth
-from flask_bcrypt import Bcrypt
-from flask_jwt_extended import create_access_token, jwt_required, JWTManager
-import datetime
+import os
+from flask import Flask
+from flask_login import LoginManager
+import firebase_admin
+from firebase_admin import credentials, fireatore, auth
+from azure.storage.blob import BlobServiceClient
 
-app = Flask(__name__)
-bcrypt = Bcrypt(app)
-app.config["JWT_SECRET_KEY"] = "12345678"
-jwt = JWTManager(app)
+from index import index
+from login import login
+from logout import logout
+from register import register
+from home import home
 
-@app.route('/')
-def home():
-    return "Hello"
+app = Flask(__name__, static_folder='../forntend/static')
+app.config['SECRET_KEY'] = os.getnev("SECRET_KEY", "default_secret_key")
 
-@app.route("/registrer", methods=["POST"])
-def register():
-    data = request.json
-    email = data.get("email")
-    password = data.get("password")
+firebase_cred_path =os.getenv("FIREBASE_CREDENTIALS", "path til serviceAccountKey.json")
+cred = credentials.Certificate(firebase_cred_path)
+firebase_admin.initialize_app(cred)
+db = fireatore.client()
 
-    if not email or not password:
-        return jsonify({"Feil": "Email og passord er påkrevd"}), 400
+#Hvis vi vil koble til Azure Storage for filhåndtering
+AZURE_STORAGE_CONNECTION_STRING = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+if AZURE_STORAGE_CONNECTION_STRING:
+    blob_service_client = BlobServiceClient.from_connection_string(AZURE_STORAGE_CONNECTION_STRING)
+    print("Azure Storage er tilkoblet!")
 
-    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+login_manager = LoginManager()
+login_manager.init_app(app)
 
-    try: 
-        user = auth.get_user_by_email(email)
-        token = create_access_token(identity=user.uid, expires_delta=datetime.timedelta(hours=1))
-        return jsonify({"token":token}), 200
-    except Exception as e:
-        return jsonify({"Feil": "Ikke riktig informasjon"}), 401
+app.register_blueprint(index)
+app.register_blueprint(login)
+app.register_blueprint(logout) #Litt usikker på om vi trenger en egen logout, men tar den med her
+app.register_blueprint(register)
+app.register_blueprint(home)
 
-@app.route("/protected", methods=["GET"])
-@jwt_required()
-def protected ():
-    return jsonify({"Melding": "Du har tilgang"}), 200
-                    
-if __name__=='main':
-    app.run(debug=True, host="0.0.0.0")
+class User:
+    def __init__(self, uis, username, email):
+        self.id = uid
+        self.username = username
+        self.email = email
 
+@login_manager.user_loader
+def load_user(user_id):
+    """Henter bruker fra Firestore basert på UID"""
+    user_ref = db.collection('users').document(user_id).get()
+    if user_ref.exists:
+        user_data = user_ref.to_dict()
+        return User(user_data['uid'], user_data['username'], user_data['email'])
+    return None
+
+if __name__== '__main__':
+    app.run(host='0.0.0.0', port=int(os.getenv("PORT", 3000)))
+    
