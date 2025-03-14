@@ -1,7 +1,9 @@
+import os
 from flask import Blueprint, url_for, render_template, redirect, request
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
 
+firebase_cred_path = os.getenv("FIREBASE_CREDENTIALS", "path til serviceAccountKey.json")
 cred = credentials.Certificate('Path til serviceAccountKey.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
