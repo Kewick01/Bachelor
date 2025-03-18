@@ -10,7 +10,7 @@ from logout import logout
 from register import register
 from home import home
 
-app = Flask(__name__, static_folder='../forntend/static')
+app = Flask(__name__, static_folder='../frontend/static')
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "default_secret_key")
 
 firebase_cred_path =os.getenv("FIREBASE_CREDENTIALS", "path til serviceAccountKey.json")
