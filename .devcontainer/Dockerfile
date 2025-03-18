@@ -9,6 +9,7 @@ COPY logout.py /app/
 COPY register.py /app/
 COPY firebase_config.py /app/
 COPY requirements.txt /app/
+COPY devcontainer.json /app/
 RUN pip install -r requirements.txt
 
 EXPOSE 3000
