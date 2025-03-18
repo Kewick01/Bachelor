@@ -5,7 +5,6 @@ import firebase_admin
 from firebase_admin import credentials, firestore, auth
 from azure.storage.blob import BlobServiceClient
 
-from index import index
 from login import login
 from logout import logout
 from register import register
@@ -28,7 +27,6 @@ if AZURE_STORAGE_CONNECTION_STRING:
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-app.register_blueprint(index)
 app.register_blueprint(login)
 app.register_blueprint(logout) #Litt usikker på om vi trenger en egen logout, men tar den med her
 app.register_blueprint(register)
