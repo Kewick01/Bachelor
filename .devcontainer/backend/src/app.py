@@ -1,8 +1,8 @@
 import os
-from flask import Flask
+from flask import Flask, redirect
 from flask_login import LoginManager
 import firebase_admin
-from firebase_admin import credentials, fireatore, auth
+from firebase_admin import credentials, firestore, auth
 from azure.storage.blob import BlobServiceClient
 
 from index import index
@@ -12,12 +12,12 @@ from register import register
 from home import home
 
 app = Flask(__name__, static_folder='../forntend/static')
-app.config['SECRET_KEY'] = os.getnev("SECRET_KEY", "default_secret_key")
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "default_secret_key")
 
 firebase_cred_path =os.getenv("FIREBASE_CREDENTIALS", "path til serviceAccountKey.json")
 cred = credentials.Certificate(firebase_cred_path)
 firebase_admin.initialize_app(cred)
-db = fireatore.client()
+db = firestore.client()
 
 #Hvis vi vil koble til Azure Storage for filhåndtering
 AZURE_STORAGE_CONNECTION_STRING = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
@@ -35,7 +35,7 @@ app.register_blueprint(register)
 app.register_blueprint(home)
 
 class User:
-    def __init__(self, uis, username, email):
+    def __init__(self, uid, username, email):
         self.id = uid
         self.username = username
         self.email = email
@@ -48,6 +48,10 @@ def load_user(user_id):
         user_data = user_ref.to_dict()
         return User(user_data['uid'], user_data['username'], user_data['email'])
     return None
+
+@app.route('/')
+def index():
+    return redirect('/login')
 
 if __name__== '__main__':
     app.run(host='0.0.0.0', port=int(os.getenv("PORT", 3000)))
