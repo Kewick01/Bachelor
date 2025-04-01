@@ -4,10 +4,10 @@
   "service": "app",
   "workspaceFolder": "/workspaces",
   "forwardPorts": [
-    7071,
-    10000,
+    7072,
     10001,
-    10002
+    10002,
+    10003
   ],
   "otherPortsAttributes": {
     "onAutoForward": "ignore"
