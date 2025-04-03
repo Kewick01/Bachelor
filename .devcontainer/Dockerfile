@@ -4,13 +4,10 @@ WORKDIR /workspaces
 
 COPY .devcontainer/backend /workspaces/backend/
 
-
 WORKDIR /workspace/backend/src
 
 COPY /requirements.txt /workspace/backend/src/
 
-RUN pip install --no-cache-dir -r /workspace/backend/src/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 3000
-
-CMD [ "python", "app.py" ]

@@ -1,8 +1,8 @@
 {
   "name": "Azure Functions (Python 3)",
-  "dockerComposeFile": "docker-compose.yml",
+  "dockerComposeFile": "C:/Users/kevin/OneDrive/Documents/Github/Bachelor/.devcontainer/docker-compose.yml",
   "service": "app",
-  "workspaceFolder": "/workspaces",
+  "workspaceFolder": "/workspace/backend/src",
   "forwardPorts": [
     7072,
     10001,
@@ -12,13 +12,13 @@
   "otherPortsAttributes": {
     "onAutoForward": "ignore"
   },
-  "postCreateCommand": "pip install -r requirements.txt",
+  "postCreateCommand": "pip install -r /workspace/requirements.txt",
   "features": {
     "ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools:1": {},
-	"ghcr.io/devcontainers/features/docker-in-docker:2": {},
-	"ghcr.io/devcontainers/features/github-cli:1": {},
-	"ghcr.io/devcontainers/features/node:1": {},
-	"ghcr.io/hspaans/devcontainer-features/pycqa:1": {}
+  "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+  "ghcr.io/devcontainers/features/github-cli:1": {},
+  "ghcr.io/devcontainers/features/node:1": {},
+  "ghcr.io/hspaans/devcontainer-features/pycqa:1": {}
   },
   "customizations": {
     "vscode": {
