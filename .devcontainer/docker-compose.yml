@@ -6,17 +6,14 @@ services:
     platform: linux/amd64
     volumes:
      - ..:/workspace:cached
-
-
-
+    working_dir: /workspace/backend/src 
     command: python app.py
-    networks:
-     default:
+    depends_on:
+      - azurite
 
     ports:
       - "7072:7071"
       - "10001:10001"
-      - "10002:10002"
       - "10003:10003"
 
   azurite:
@@ -26,4 +23,7 @@ services:
       - "10000:10000"
       - "10010:10010"
       - "10002:10002"
+
+networks:
+ default:
 
