@@ -15,7 +15,7 @@
   "postCreateCommand": "pip install -r /workspace/requirements.txt",
   "features": {
     "ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools:1": {},
-  "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+  "ghcr.io/devcontainers/features/docker-in-docker:3": {},
   "ghcr.io/devcontainers/features/github-cli:1": {},
   "ghcr.io/devcontainers/features/node:1": {},
   "ghcr.io/hspaans/devcontainer-features/pycqa:1": {}
